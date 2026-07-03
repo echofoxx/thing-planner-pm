@@ -1,15 +1,31 @@
-# Thing Planner PM v0.3.3 Release Notes
+# Thing Planner PM v0.3.4 Release Notes
 
 ## Purpose
 
-v0.3.3 is a Docker reliability patch for the modern React/Vite frontend.
+v0.3.4 adds a higher-quality AI/work-management UX inspired by modern project platforms and CRM-style workflows.
 
-## Fixes
+## Added
 
-- Changed the default Docker build to serve the already-built `dist/` folder with Nginx.
-- Avoids `npm install` during the normal Docker build path.
-- Keeps a separate `Dockerfile.build` for source-based production builds when desired.
-- Retains the v0.3.2 UX fixes: closable drill-down drawer, theme selector, improved layout polish, and TypeScript module-resolution fix.
+- AI Command Center
+- AI sidekick action suggestions
+- Predictive Project End dashboard
+- Budget, pace, capacity, and time-slippage signals
+- Resource capacity heatmap
+- CRM Work Pipeline
+- Accounts, contacts, workstreams, estimated value, stage, owner, health, and next action fields
+- Portfolio hero panel with enterprise visibility messaging
+- Team planning table experience with Main table / Forecast / Kanban / AI tabs
+- More polished light-first UI with existing theme support
+- AI drawer with plan actions
+- Smarter task drill-down recommendations
+
+## Fixed / Retained
+
+- Retains v0.3.3 Docker reliability patch using prebuilt `dist/`
+- Retains v0.3.2 drawer close behavior fix
+- Retains theme selector
+- Retains TypeScript module-resolution fix
+- Maintains Docker and local Node run paths
 
 ## Recommended Docker command
 
@@ -24,12 +40,4 @@ Open:
 
 ```text
 http://localhost:8088
-```
-
-## Source-build option
-
-If you want Docker to rebuild the React app from source instead of using the committed `dist/` folder:
-
-```powershell
-docker build -f Dockerfile.build -t thing-planner-pm:source-build .
 ```
