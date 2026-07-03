@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <text x="54" y="72" font-family="Arial" font-size="38" font-weight="700" fill="#111827">WBS / Task Planner</text>
+  <text x="54" y="108" font-family="Arial" font-size="18" fill="#6b7280">Trace phases, milestones, tasks, owners, dates, status, and linked blockers.</text>
+  <rect x="54" y="145" width="1172" height="500" rx="18" fill="#f9fafb" stroke="#d1d5db"/>
+  <g font-family="Arial" font-size="18">
+    <rect x="78" y="170" width="1124" height="52" rx="10" fill="#111827"/>
+    <text x="102" y="204" fill="#fff" font-weight="700">WBS</text><text x="210" y="204" fill="#fff" font-weight="700">Task</text><text x="600" y="204" fill="#fff" font-weight="700">Owner</text><text x="760" y="204" fill="#fff" font-weight="700">Status</text><text x="950" y="204" fill="#fff" font-weight="700">Due</text>
+    <text x="102" y="270" fill="#111827">1.0</text><text x="210" y="270" fill="#111827">Discovery Phase</text><text x="600" y="270">PM</text><text x="760" y="270">In Progress</text><text x="950" y="270">Jul 12</text>
+    <line x1="78" y1="295" x2="1202" y2="295" stroke="#e5e7eb"/>
+    <text x="102" y="338" fill="#111827">1.1</text><text x="210" y="338" fill="#111827">Define project outcome</text><text x="600" y="338">Owner</text><text x="760" y="338">Done</text><text x="950" y="338">Jul 04</text>
+    <line x1="78" y1="363" x2="1202" y2="363" stroke="#e5e7eb"/>
+    <text x="102" y="406" fill="#111827">1.2</text><text x="210" y="406" fill="#111827">Capture requirements</text><text x="600" y="406">Team</text><text x="760" y="406">Review</text><text x="950" y="406">Jul 08</text>
+    <line x1="78" y1="431" x2="1202" y2="431" stroke="#e5e7eb"/>
+    <text x="102" y="474" fill="#111827">2.0</text><text x="210" y="474" fill="#111827">Build Phase</text><text x="600" y="474">Dev</text><text x="760" y="474">Ready</text><text x="950" y="474">Jul 20</text>
+    <line x1="78" y1="499" x2="1202" y2="499" stroke="#e5e7eb"/>
+    <text x="102" y="542" fill="#111827">2.1</text><text x="210" y="542" fill="#111827">Create working prototype</text><text x="600" y="542">Dev</text><text x="760" y="542">In Progress</text><text x="950" y="542">Jul 15</text>
+  </g>
+</svg>

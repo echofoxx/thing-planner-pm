@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#f8fafc"/>
+  <text x="50" y="70" fill="#0f172a" font-family="Arial" font-size="38" font-weight="700">Kanban Board</text>
+  <text x="50" y="105" fill="#64748b" font-family="Arial" font-size="18">Drag tasks across workflow columns and keep dashboard, WBS, timeline, and reports in sync.</text>
+  <g font-family="Arial">
+    <g transform="translate(50 145)"><rect width="220" height="520" rx="18" fill="#e2e8f0"/><text x="20" y="42" font-size="22" font-weight="700" fill="#0f172a">Backlog</text><rect x="18" y="70" width="184" height="100" rx="14" fill="#fff" stroke="#cbd5e1"/><text x="34" y="110" font-size="16">Define scope</text><text x="34" y="142" font-size="13" fill="#64748b">WBS 1.1</text></g>
+    <g transform="translate(300 145)"><rect width="220" height="520" rx="18" fill="#e2e8f0"/><text x="20" y="42" font-size="22" font-weight="700" fill="#0f172a">Ready</text><rect x="18" y="70" width="184" height="100" rx="14" fill="#fff" stroke="#cbd5e1"/><text x="34" y="110" font-size="16">Create plan</text><text x="34" y="142" font-size="13" fill="#64748b">Due Friday</text></g>
+    <g transform="translate(550 145)"><rect width="220" height="520" rx="18" fill="#dbeafe"/><text x="20" y="42" font-size="22" font-weight="700" fill="#0f172a">In Progress</text><rect x="18" y="70" width="184" height="100" rx="14" fill="#fff" stroke="#93c5fd"/><text x="34" y="110" font-size="16">Build prototype</text><text x="34" y="142" font-size="13" fill="#2563eb">Owner: Adrian</text></g>
+    <g transform="translate(800 145)"><rect width="220" height="520" rx="18" fill="#fef3c7"/><text x="20" y="42" font-size="22" font-weight="700" fill="#0f172a">Review</text><rect x="18" y="70" width="184" height="100" rx="14" fill="#fff" stroke="#fbbf24"/><text x="34" y="110" font-size="16">Acceptance test</text><text x="34" y="142" font-size="13" fill="#b45309">Needs evidence</text></g>
+    <g transform="translate(1050 145)"><rect width="180" height="520" rx="18" fill="#dcfce7"/><text x="20" y="42" font-size="22" font-weight="700" fill="#0f172a">Done</text><rect x="18" y="70" width="144" height="100" rx="14" fill="#fff" stroke="#86efac"/><text x="34" y="110" font-size="16">Kickoff</text><text x="34" y="142" font-size="13" fill="#15803d">Closed</text></g>
+  </g>
+</svg>
