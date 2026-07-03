@@ -1,482 +1,125 @@
-# Thing Planner PM
+# Thing Planner PM v0.3.0
 
-**Thing Planner PM** is a lightweight, template-first project management web application for planning and tracking real-life projects without the overhead of a heavy enterprise PM suite. It combines a simple project launch wizard, starter templates, Kanban workflow, WBS planning, lightweight timeline tracking, risks/issues/decisions/lessons logs, reporting, and offline-friendly JSON/CSV import-export.
+A modern, template-first project management web application for software, home, auto, office, standards/document, and event projects. This release moves Thing Planner PM from a static prototype toward a real modern frontend foundation using React, Vite, and TypeScript.
 
-The goal is to make project management approachable for many project types — software, home, auto, office/work, events, document/standards efforts, and other “things” that need structure — while keeping enough detail and traceability to feel like a professional application.
+## Release Goal
 
----
+v0.3.0 introduces a modern frontend architecture with a polished UI, multi-user role model, multiple projects per user, project portfolio dashboard, drill-downs, smart references, WBS traceability, admin console concepts, and Docker-ready deployment.
 
-## Table of Contents
+This version is still frontend/demo-data driven, but the data model is shaped for a future backend using SQLite/Postgres and real authentication.
 
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Screenshots](#screenshots)
-- [Project Types and Starter Templates](#project-types-and-starter-templates)
-- [User Guide](#user-guide)
-- [Installation](#installation)
-- [Docker Usage](#docker-usage)
-- [GitHub Setup](#github-setup)
-- [Import and Export](#import-and-export)
-- [Data Model](#data-model)
-- [Workflow and Traceability](#workflow-and-traceability)
-- [AI Planning Assistant](#ai-planning-assistant)
-- [Completed Project Archive](#completed-project-archive)
-- [Roadmap](#roadmap)
-- [Recommended Next Development Steps](#recommended-next-development-steps)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
+## Features
 
----
+### Modern Frontend
 
-## v0.2.0 UX/UI Upgrade
+- React + Vite + TypeScript
+- Componentized application shell
+- Responsive layout for desktop and tablet
+- Professional dark command-center visual style
+- Sidebar navigation, top action bar, project switcher, and detail drawer
 
-This release steps up the application from a simple local prototype into a more professional project command center. The goal is to make every important project attribute discoverable, connected, and actionable without overwhelming the user.
+### Multi-User Foundation
 
-### New UX/UI capabilities
+Demo roles are included:
 
-- Polished dashboard layout with command-center visual hierarchy
-- Sidebar project switcher for multiple projects
-- Role-aware user card for Admin, Power User, Member, and Viewer concepts
-- Personal portfolio dashboard across projects
-- Project-level command center with clickable metrics
-- Drill-down task drawer with status, owner, due date, priority, acceptance criteria, dependency, phase, milestone, risks, issues, evidence, and activity
-- Phase drill-down drawer with progress and linked tasks
-- Relationship map showing how phases, tasks, risks, issues, decisions, lessons, and templates connect
-- Kanban cards that show phase, milestone, owner, due date, priority, risk links, and issue links
-- WBS planner with project traceability references
-- Admin console concept for users, projects, repair tools, and project operations
-- Improved dark/light theme support
-- Stronger responsive layout for desktop, tablet, and mobile
+| Role | Purpose |
+|---|---|
+| Admin | Full workspace visibility and admin console access |
+| Power User | Multiple projects and portfolio management |
+| Member | Task execution and project collaboration |
+| Viewer | Read-only dashboard and report access |
 
-### Professional traceability model
+The demo user switcher allows quick role testing.
 
-The app now treats project data as a connected graph:
+### Multiple Projects Per User
 
-```text
-User → Project Membership → Project → Phase → Milestone → Task
-                                      ├── Risk
-                                      ├── Issue
-                                      ├── Decision
-                                      ├── Lesson Learned
-                                      └── Activity / Evidence
-```
+- User-visible project list
+- Project ownership model
+- Project membership model
+- Portfolio view across accessible projects
+- Per-project dashboard, WBS, relationship, and reporting views
 
-This allows the user to start from a high-level project dashboard and drill into the exact record behind a project status, blocker, risk, due date, or task movement.
+### Portfolio Command Center
 
-### Multi-user and multi-project foundation
+- Active projects
+- Blocked tasks
+- Review workload
+- Admin readiness
+- Project health cards
+- Progress bars
+- AI project coach panel
+- Recent activity feed
 
-The current version remains local/static, but the data model now supports the structure needed for a backend release:
+### Project Board
 
-- Users
-- Roles
-- Project membership
-- Project ownership
-- Multiple projects per user
-- Shared projects
-- Admin project operations
-- Portfolio dashboard
-- System-wide JSON export/import
+- Kanban workflow columns
+- Task cards with WBS, priority, phase, milestone, owner, and due date
+- Search/filter field
+- Smart references retained across project views
 
+### WBS View
 
----
+- Work Breakdown Structure table
+- Phase/milestone/task traceability
+- Owner and status visibility
+- Risk, issue, and dependency counts
+- Clickable task drill-down
 
-## Overview
+### Relationship Map
 
-Thing Planner PM modernizes the structure of a lifecycle project planning spreadsheet into a browser-based project management application. The legacy workbook pattern included project setup, planning, WBS, task monitoring, issue logging, reporting, and hidden calculations. This app turns that into an interactive local web application.
+- Project → Phase → Milestone → Task visual flow
+- Clickable phase drill-down
+- Clickable task drill-down
+- Helps users understand how work items relate to project outcomes
 
-The application is designed around one shared project model. A task appears in the Kanban board, WBS table, timeline, reports, and dashboard, but it is still one underlying record. When the task changes status, all views reflect the change.
+### Task Drill-Down Drawer
 
-### Product positioning
+Each task includes:
 
-> Start any kind of project in minutes. Get a professional plan, Kanban board, WBS, timeline, issue log, and status report automatically — then reuse completed projects as templates for future work.
+- WBS ID
+- Description
+- Phase reference
+- Milestone reference
+- Owner reference
+- Dependencies
+- Risks
+- Issues
+- Acceptance criteria
+- Evidence placeholder
 
-### Current version
+### Admin Console Concept
 
-```text
-v0.2.0 - UX/UI upgrade, multi-project foundation, role-aware workspace, smart relationships, and drill-downs
-```
+Admin tools include frontend-ready controls for:
 
-This version runs in the browser with no backend required. It stores data locally in the browser using `localStorage` and supports JSON/CSV export for backup and offline portability. The current data model is intentionally shaped to support a future backend using SQLite/Postgres, real authentication, team permissions, and file attachments.
+- User visibility
+- Project visibility
+- Recalculate project health
+- Rebuild WBS numbering
+- Validate imported data
+- Restore archived projects
+- Audit-mode concept
 
----
+### Reports
 
-## Key Features
-
-### Project startup
-
-- New Project Wizard
-- Project type selection
-- Starter templates by project type
-- Pre-populated phases, milestones, and minimum tasks
-- Suggested starter risks and workflow steps
-- Complexity selection concept: simple, moderate, complex
-- Project goal and outcome capture
-
-### Project Command Center
-
-- Project health summary
-- Percent complete
-- Current project status
-- Open blockers
-- Due-soon work
-- Milestone visibility
-- AI-style next action guidance
-- Activity and traceability overview
-
-### Kanban Board
-
-- Drag-and-drop task workflow
-- Default workflow columns:
-  - Backlog
-  - Ready
-  - In Progress
-  - Review
-  - Blocked
-  - Done
-- Visual task cards
-- Status updates reflected across the application
-- Simple workflow designed for both personal and professional projects
-
-### Work Breakdown Structure
-
-- WBS-style task planning
-- Phase, milestone, task, and subtask structure
-- WBS IDs such as `1.0`, `1.1`, `2.3`
-- Owner, due date, priority, and status fields
-- Traceability from high-level outcome to execution task
-
-### Timeline / Gantt-style view
-
-- Lightweight timeline view
-- Phase and task visibility
-- Due-date tracking
-- Milestone orientation
-- Designed to answer: “Are we on track?”
-
-### Risks, Issues, Decisions, and Lessons
-
-- Risk log
-- Issue / blocker tracking
-- Decision log
-- Lessons learned capture
-- Change/activity log
-- Closeout notes for future reuse
-
-### Import / Export
-
-- Export complete project data to JSON
-- Import JSON to continue work offline or on another machine
-- Export task list to CSV
-- Preserve completed projects for future reference
-
-### Completed Project Archive
-
-- Save completed projects
-- Capture success notes and lessons learned
-- Reuse completed projects as future starting points
-- Build a practical knowledge base over time
-
-### Local-first operation
-
-- Runs as a static web app
-- No required cloud service
-- No required database in v0.1.0
-- Can run with Python simple server, VS Code Live Server, or Docker/Nginx
-- Good foundation for a future self-hosted Docker app
-
----
-
-## Screenshots
-
-The `/screenshots` folder contains starter SVG mockups. Replace or add real screenshots as the app matures.
-
-### Project Command Center
-
-![Project Command Center](screenshots/command-center.svg)
-
-### New Project Wizard
-
-![New Project Wizard](screenshots/project-wizard.svg)
-
-### Kanban Board
-
-![Kanban Board](screenshots/kanban-board.svg)
-
-### WBS / Task Planner
-
-![WBS Planner](screenshots/wbs-planner.svg)
-
-### Suggested future screenshots
-
-Add these images later when the app has matured:
-
-```text
-screenshots/timeline-view.png
-screenshots/risk-log.png
-screenshots/export-import.png
-screenshots/completed-project-archive.png
-screenshots/mobile-view.png
-```
-
----
-
-## Project Types and Starter Templates
-
-Thing Planner PM starts by asking what kind of project the user is planning. From that answer, it can pre-populate phases, milestones, minimum tasks, and starter risks.
-
-### Software Application
-
-Recommended phases:
-
-1. Discovery
-2. Requirements
-3. UX / UI Design
-4. Build
-5. Test
-6. Release
-7. Support / Maintenance
-
-Example starter tasks:
-
-- Define product outcome
-- Identify users and roles
-- Capture MVP requirements
-- Build data model
-- Create UI prototype
-- Implement core workflow
-- Test critical user paths
-- Prepare release notes
-
-### Home Project
-
-Recommended phases:
-
-1. Scope
-2. Budget
-3. Materials
-4. Contractor / DIY Planning
-5. Execution
-6. Inspection
-7. Closeout
-
-Example starter tasks:
-
-- Define project outcome
-- Estimate budget
-- Identify required tools/materials
-- Capture measurements
-- Schedule work windows
-- Track receipts
-- Document before/after photos
-
-### Auto Project
-
-Recommended phases:
-
-1. Diagnosis
-2. Parts
-3. Tools
-4. Repair Plan
-5. Work Execution
-6. Test Drive / Validation
-7. Maintenance Record
-
-Example starter tasks:
-
-- Capture symptoms
-- Research repair procedure
-- Identify parts
-- Order supplies
-- Perform repair
-- Validate fix
-- Save notes for future service
-
-### Office / Work Project
-
-Recommended phases:
-
-1. Intake
-2. Planning
-3. Coordination
-4. Execution
-5. Reporting
-6. Closeout
-
-Example starter tasks:
-
-- Define sponsor outcome
-- Identify stakeholders
-- Create task plan
-- Track decisions
-- Prepare weekly status
-- Capture lessons learned
-
-### Document / Standards Project
-
-Recommended phases:
-
-1. Draft
-2. Internal Review
-3. External Review
-4. Comment Adjudication
-5. Approval
-6. Publication
-7. Maintenance
-
-Example starter tasks:
-
-- Define document scope
-- Create outline
-- Draft sections
-- Assign reviewers
-- Track comments
-- Resolve adjudication items
-- Publish final version
-
-### Event Project
-
-Recommended phases:
-
-1. Concept
-2. Venue / Platform
-3. Vendors / Materials
-4. Agenda
-5. Guests / Participants
-6. Execution
-7. After Action
-
-Example starter tasks:
-
-- Define event objective
-- Confirm date and location
-- Build agenda
-- Track attendee list
-- Prepare materials
-- Execute event
-- Capture feedback
-
----
-
-## User Guide
-
-### 1. Start the app
-
-Run the application locally using one of the installation methods below, then open the app in your browser.
-
-Default local URL:
-
-```text
-http://localhost:8088
-```
-
-### 2. Create a project
-
-Use the New Project Wizard to create a starter plan.
-
-Recommended inputs:
-
-- Project name
-- Project type
-- Goal / outcome
-- Start date
-- Target finish date
-- Complexity level
-- Primary owner
-
-The app will create a starter structure with phases, milestones, tasks, and default workflow states.
-
-### 3. Review the Command Center
-
-Use the Command Center to understand the project at a glance:
-
-- Overall health
-- Percent complete
-- Due-soon work
-- Blockers
-- Current phase or milestone
-- AI-style recommended next actions
-
-### 4. Manage work in the Kanban Board
-
-Use the Kanban board for daily execution.
-
-Drag task cards between workflow columns:
-
-```text
-Backlog → Ready → In Progress → Review → Blocked → Done
-```
-
-Recommended usage:
-
-- Move work to `Ready` when it is actionable.
-- Move work to `In Progress` when someone starts it.
-- Move work to `Review` when it needs validation.
-- Move work to `Blocked` when waiting on something.
-- Move work to `Done` only when it is complete and verified.
-
-### 5. Manage details in the WBS planner
-
-Use the WBS / task planner when you need more structure.
-
-Typical use cases:
-
-- Add or edit tasks
-- Adjust due dates
-- Assign owners
-- Organize work by phase
-- Track completion status
-- Build a professional project structure
-
-### 6. Use risks, issues, decisions, and lessons
-
-Use logs to preserve project traceability:
-
-- **Risks**: something that may happen
-- **Issues**: something that is already happening
-- **Decisions**: important choices made during the project
-- **Lessons**: things to reuse or avoid next time
-
-This is especially useful for professional projects, recurring home/auto projects, and future AI-assisted planning.
-
-### 7. Export your project
-
-Use JSON export to create a full backup of the project.
-
-Use CSV export when you want to review tasks in Excel, Google Sheets, or another spreadsheet tool.
-
-### 8. Import a project
-
-Use JSON import to reload a prior project or continue work on another machine.
-
-Recommended practice:
-
-```text
-Export JSON at the end of each major project milestone.
-```
-
-### 9. Close a project
-
-When the project is complete:
-
-- Mark remaining tasks done or cancelled
-- Capture lessons learned
-- Save completion notes
-- Archive the project
-- Reuse the completed project later as a template
-
----
+- Executive status summary
+- Project traceability summary
+- Export action placeholders
+- Markdown/status report direction
 
 ## Installation
 
-Thing Planner PM is currently a static web application. It does not require Node, Python dependencies, a database, or a backend API for v0.1.0.
+### Prerequisites
 
-### Option 1: Run with Python on Windows PowerShell
+- Node.js 22 or later recommended
+- npm
+- Docker Desktop optional
 
-From your project folder:
+## Run Locally Without Docker
 
 ```powershell
 cd C:\docker\thing-planner-pm
-py -m http.server 8088
+npm install
+npm run dev
 ```
 
 Open:
@@ -485,44 +128,7 @@ Open:
 http://localhost:8088
 ```
 
-### Option 2: Run with Python on Mac/Linux
-
-```bash
-cd thing-planner-pm
-python3 -m http.server 8088
-```
-
-Open:
-
-```text
-http://localhost:8088
-```
-
-### Option 3: Run with VS Code Live Server
-
-1. Open the folder in VS Code.
-2. Install the Live Server extension.
-3. Right-click `index.html`.
-4. Select **Open with Live Server**.
-
-### Option 4: Run as a static website
-
-Any static web server can host this app:
-
-- Nginx
-- Caddy
-- Apache
-- Synology Web Station
-- GitHub Pages
-- Local Python server
-
----
-
-## Docker Usage
-
-This app is not Docker-only, but Docker support is included so it can run like your other local tools.
-
-### Build and run with Docker Compose
+## Run With Docker
 
 ```powershell
 cd C:\docker\thing-planner-pm
@@ -535,462 +141,214 @@ Open:
 http://localhost:8088
 ```
 
-### Stop the container
+Stop:
 
 ```powershell
 docker compose down
 ```
 
-### Rebuild after changes
+## Build for Production
 
 ```powershell
-docker compose up --build -d
+npm install
+npm run build
+npm run preview
 ```
 
-### Run with Docker only
+## GitHub Update Workflow
 
-```powershell
-docker build -t thing-planner-pm .
-docker run --name thing-planner-pm -p 8088:80 -d thing-planner-pm
-```
-
-### Docker files included
-
-```text
-Dockerfile
-docker-compose.yml
-```
-
-The Docker image uses Nginx to serve the static files from the container.
-
----
-
-## GitHub Setup
-
-Recommended repository:
-
-```text
-https://github.com/echofoxx/thing-planner-pm
-```
-
-Recommended description:
-
-```text
-Template-first project management web app with Kanban, WBS, workflow traceability, starter templates, reporting, and offline JSON/CSV import-export.
-```
-
-Recommended topics:
-
-```text
-project-management, kanban, wbs, planning, offline-first, productivity, javascript, template-driven, ai-planning, docker
-```
-
-### Initial commit
+From your local project folder:
 
 ```powershell
 cd C:\docker\thing-planner-pm
-git init
+git status
 git add .
-git commit -m "Initial Thing Planner PM prototype"
-git branch -M main
-git remote add origin https://github.com/echofoxx/thing-planner-pm.git
+git commit -m "Upgrade to modern React frontend v0.3.0"
 git push -u origin main
 ```
 
-### If the remote already exists
-
-```powershell
-git remote -v
-```
-
-If `origin` already points to the correct repo, do not add it again.
-
-### If GitHub has a README conflict
-
-Keep the local comprehensive README:
-
-```powershell
-git checkout --ours README.md
-git add README.md
-git commit -m "Resolve README conflict with comprehensive project documentation"
-git push -u origin main
-```
-
-### If your local branch is behind the remote
+If GitHub has remote changes, pull first:
 
 ```powershell
 git pull origin main --allow-unrelated-histories
 ```
 
-Resolve any conflicts, then:
+Resolve conflicts, then commit and push.
 
-```powershell
-git add .
-git commit -m "Merge remote repository with local Thing Planner PM prototype"
-git push -u origin main
-```
+## User Guide
 
----
+### 1. Select a User Role
 
-## Import and Export
+Use the user selector in the sidebar to test the app as:
 
-### JSON export
+- Adrian Francis / Admin
+- Morgan Lee / Power User
+- Jamie Rivera / Member
+- Taylor Kim / Viewer
 
-Use JSON export for full project backup and portability.
+### 2. Open Portfolio
 
-Recommended file naming:
+The Portfolio Command Center shows all projects visible to the current user. Click a project card to drill into that project.
 
-```text
-thing-planner-project-name-YYYY-MM-DD.json
-```
+### 3. Use Project Board
 
-JSON should preserve:
+The board displays project tasks by workflow status. Cards include project references such as phase, milestone, owner, due date, and priority.
 
-- Project metadata
-- Phases
-- Milestones
-- Tasks
-- Risks
-- Issues
-- Decisions
-- Lessons
-- Completed project archive data
-- Activity log
+### 4. Open a Task Drill-Down
 
-### JSON import
+Click any task card or WBS row to open the task drawer. The drawer shows the task's smart project references.
 
-Use JSON import to reload a previous project or move work between devices.
+### 5. Use WBS View
 
-Recommended validation rules for future versions:
+The WBS table shows project structure and traceability from work package to status, owner, milestone, and related risks/issues.
 
-- Confirm schema version
-- Validate required project fields
-- Check for duplicate task IDs
-- Confirm workflow statuses
-- Warn before replacing active local data
+### 6. Use Relationship View
 
-### CSV export
+The relationship view shows how the project connects phases, milestones, and tasks. This is intended to evolve into a full relationship graph.
 
-Use CSV export for task review in Excel or Google Sheets.
+### 7. Use Admin Console
 
-Recommended columns:
+Switch to the Admin role to see the Admin Console. Admin tools are currently frontend placeholders and should be connected to backend API actions in the next release.
+
+## Data Model Direction
+
+v0.3.0 uses demo data, but the structure is intentionally backend-ready:
 
 ```text
-WBS ID, Phase, Milestone, Task, Owner, Status, Priority, Start Date, Due Date, Actual Finish, Blocked, Notes
+User
+ └── Project Membership
+      └── Project
+           ├── Phases
+           ├── Milestones
+           ├── Tasks
+           ├── Risks
+           ├── Issues
+           ├── Decisions
+           ├── Lessons Learned
+           ├── Activity Events
+           └── Reports
 ```
-
-### Future CSV import
-
-Future CSV import should support mapping columns from spreadsheets into the app’s data model.
-
----
-
-## Data Model
-
-The app uses a single shared project data model across all views.
-
-```text
-Project
-├── Metadata
-│   ├── Name
-│   ├── Type
-│   ├── Goal
-│   ├── Owner
-│   ├── Start Date
-│   └── Target Finish Date
-├── Team Members
-├── Phases
-│   └── Milestones
-├── Tasks
-│   ├── WBS ID
-│   ├── Title
-│   ├── Description
-│   ├── Owner
-│   ├── Status
-│   ├── Priority
-│   ├── Start Date
-│   ├── Due Date
-│   ├── Actual Start
-│   ├── Actual Finish
-│   ├── Dependencies
-│   ├── Evidence
-│   └── Comments
-├── Risks
-├── Issues
-├── Decisions
-├── Lessons Learned
-└── Activity Log
-```
-
----
-
-## Workflow and Traceability
-
-A professional project app should make changes visible and traceable.
-
-Recommended workflow behavior:
-
-| User action | System behavior |
-|---|---|
-| Move task to In Progress | Set actual start date if empty |
-| Move task to Review | Prompt for acceptance criteria or evidence |
-| Move task to Blocked | Prompt for blocker reason |
-| Move task to Done | Set actual finish date and update progress |
-| Add issue | Link issue to task, phase, or milestone |
-| Close project | Capture final notes and lessons learned |
-
-Future versions should add a formal audit trail:
-
-```text
-Who changed what, when, from what value, to what value, and why.
-```
-
----
-
-## AI Planning Assistant
-
-v0.1.0 includes a local rule-based AI-style assistant concept. Future versions should support optional local AI through Ollama and optional hosted AI provider configuration.
-
-### Recommended AI capabilities
-
-- Scope interview assistant
-- AI-generated starter WBS
-- AI-generated milestones
-- AI-generated risks and assumptions
-- AI-generated status reports
-- AI project closeout assistant
-- Similar-project recall from completed archives
-- Lessons learned extraction
-- Template improvement recommendations
-
-### Recommended local AI direction
-
-For local/self-hosted use:
-
-```text
-Ollama + local model + optional embedding store
-```
-
-Potential future components:
-
-- Ollama for local LLM responses
-- SQLite/Postgres for project data
-- Qdrant or SQLite vector extension for similar-project recall
-- FastAPI or Node backend for AI orchestration
-
----
-
-## Completed Project Archive
-
-Completed projects should become reusable knowledge.
-
-When a project is closed, capture:
-
-- Final status
-- Success rating
-- Actual duration
-- Estimated vs actual effort
-- What worked
-- What did not work
-- What should be reused
-- What should be avoided
-- Final risks/issues
-- Final deliverables or evidence
-
-Future projects can then use completed projects to:
-
-- Pre-populate better tasks
-- Improve estimates
-- Suggest risks
-- Recommend checklists
-- Reuse lessons learned
-
----
 
 ## Roadmap
 
-### v0.1.0 — Local prototype
+### v0.3.1 — UX hardening
 
-- Static web app
-- Project wizard
-- Starter project templates
-- Kanban board
-- WBS/task planner
-- Timeline view
-- Risks/issues/decisions/lessons logs
-- Local browser save
-- JSON export/import
-- CSV task export
-- Completed project archive concept
-- Docker/Nginx static hosting support
+- Make Kanban drag/drop fully persistent in frontend state
+- Add saved filters
+- Add clickable dashboard metric filters
+- Add mobile refinements
+- Add more sample project templates
+- Add import/export back into the React app
 
-### v0.2.0 — Usability and data cleanup
+### v0.4.0 — Backend foundation
 
-- Editable project metadata
-- Improved task editor drawer
-- Better filtering and search
-- Custom template editor
-- Better CSV import/export mapping
-- Task dependency field
-- Budget and cost fields
-- Attachment placeholders
-- Screenshot-ready polished UI pass
-
-### v0.3.0 — Professional planning features
-
-- Real Gantt dependency lines
-- Baseline vs actual dates
-- Milestone health scoring
-- Calendar view
-- Project status report generator
-- Markdown export
-- Better issue/risk linkage
-- Project change log
-
-### v0.4.0 — Multi-user foundation
-
-- Backend API
-- SQLite for simple local persistence
-- Postgres option for team use
+- FastAPI or Node API
+- SQLite database
+- Real authentication
 - User accounts
-- Project roles: Owner, Editor, Viewer
-- Comments and mentions
-- Audit history
+- Project memberships
+- Role-based access checks
+- Persistent projects/tasks/risks/issues
+- Activity log table
+- Docker Compose app + API + DB
+
+### v0.5.0 — Collaboration and Admin
+
+- Comments
+- Mentions
+- Notifications
+- Admin repair actions
+- Transfer project ownership
+- Archive/restore projects
 - Project-level permissions
+- Audit log UI
 
-### v0.5.0 — AI-assisted planning
+### v0.6.0 — AI Project Assistant
 
-- Ollama integration
-- AI project scoping interview
-- AI WBS generator
-- AI risk generator
-- AI weekly status writer
-- AI closeout assistant
-- Completed project similarity search
-
-### v0.6.0 — Reporting and knowledge reuse
-
-- Completed project knowledge base
-- Reusable checklists
+- Project starter wizard
+- WBS generator
+- Risk finder
+- Status report writer
+- Closeout assistant
+- Similar project recall
 - Template recommendations
-- PDF export
-- Project comparison reports
-- Success pattern analysis
 
-### v1.0.0 — Production-ready release
+### v0.7.0 — Templates and knowledge reuse
 
-- Docker Compose deployment
-- Persistent backend database
-- Authentication
-- Database migrations
-- Admin template manager
-- Multi-user collaboration
-- Robust import/export validation
-- AI provider configuration
-- Backups and restore
-- Release notes and upgrade guide
+- Template manager
+- User/team/system templates
+- Clone completed project as template
+- Lessons learned library
+- Actual duration vs estimate
+- Reusable checklists
 
----
+### v0.8.0 — Attachments and evidence
 
-## Recommended Next Development Steps
+- File upload support
+- Photos/screenshots
+- Links and references
+- Completion evidence
+- Receipt/document metadata
+- Attachment storage layer
 
-1. Convert the static prototype to a React + TypeScript app.
-2. Add a formal JSON schema for project files.
-3. Add task detail drawer editing.
-4. Add real drag-and-drop using `dnd-kit`.
-5. Add SQLite/Postgres backend persistence.
-6. Add Docker Compose with app + API + database.
-7. Add AI assistant through Ollama.
-8. Add multi-user accounts and permissions.
-9. Add completed project similarity search.
-10. Add PDF/Markdown reporting.
+### v1.0.0 — Production Release
 
-Recommended future stack:
+- Real backend
+- Multi-user accounts
+- Multi-project dashboards
+- Admin console
+- Role-based permissions
+- Kanban/WBS/timeline/reporting
+- AI planning assistant
+- Import/export
+- Backup/restore
+- Docker deployment
+- Production documentation
 
-| Layer | Recommended option |
-|---|---|
-| Frontend | React + TypeScript |
-| UI | Tailwind CSS + daisyUI / shadcn-style components |
-| Drag and drop | dnd-kit |
-| Backend | FastAPI or Node/Express |
-| Local DB | SQLite |
-| Team DB | Postgres |
-| AI | Ollama local first, optional API provider later |
-| Deployment | Docker Compose |
-| Auth later | Local accounts, OAuth/Keycloak later |
+## Screenshots
 
----
-
-## Troubleshooting
-
-### `cd thing-planner-pm` fails
-
-You may already be inside the project folder.
-
-Check your current path:
-
-```powershell
-pwd
-```
-
-If you see:
+Add screenshots to:
 
 ```text
-C:\docker\thing-planner-pm
+public/screenshots/
 ```
 
-Do not run `cd thing-planner-pm` again.
-
-### `remote origin already exists`
-
-The repo already has a GitHub remote configured.
-
-Check it:
-
-```powershell
-git remote -v
-```
-
-If it points to the correct repo, continue with commit/push commands.
-
-### Push rejected because remote contains work
-
-Pull first:
-
-```powershell
-git pull origin main --allow-unrelated-histories
-```
-
-Resolve conflicts, then push.
-
-### README merge conflict
-
-Keep the local README:
-
-```powershell
-git checkout --ours README.md
-git add README.md
-git commit -m "Resolve README conflict"
-git push -u origin main
-```
-
-### Docker port already in use
-
-Change the left side of the port mapping in `docker-compose.yml`:
-
-```yaml
-ports:
-  - "8090:80"
-```
-
-Then open:
+Suggested files:
 
 ```text
-http://localhost:8090
+portfolio-dashboard.png
+project-board.png
+wbs-view.png
+relationship-map.png
+task-drawer.png
+admin-console.png
 ```
 
----
+Then reference them in this README:
 
-## License
+```markdown
+![Portfolio Dashboard](public/screenshots/portfolio-dashboard.png)
+```
 
-MIT License. See `LICENSE` for details.
+## Notes
+
+This version is intended as a modern frontend foundation. The next critical step is backend persistence with real authentication and role-based project access.
+
+
+## Docker build troubleshooting
+
+If Docker fails during `npm run build` with a TypeScript `moduleResolution=node10` deprecation warning, make sure `tsconfig.json` uses:
+
+```json
+"moduleResolution": "Bundler"
+```
+
+Then rebuild without cache:
+
+```powershell
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+```
+
+This release pins TypeScript to the 5.x line and uses the Vite-recommended bundler module resolution setting.

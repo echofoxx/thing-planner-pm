@@ -3,5 +3,5 @@ services:
     build: .
     container_name: thing-planner-pm
     ports:
-      - "8088:80"
+      - "8088:8088"
     restart: unless-stopped
