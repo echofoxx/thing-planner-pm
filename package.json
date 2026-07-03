@@ -1,0 +1,13 @@
+{
+  "name": "thing-planner-pm",
+  "version": "0.1.0",
+  "description": "Template-first project management web app with Kanban, WBS, workflow, AI-assisted planning, and import/export.",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8088",
+    "serve": "python3 -m http.server 8088"
+  },
+  "keywords": ["project-management", "kanban", "wbs", "offline-first", "ai-planning"],
+  "author": "Adrian Francis / echofoxx",
+  "license": "MIT"
+}
