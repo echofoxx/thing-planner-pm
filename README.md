@@ -28,6 +28,58 @@ The goal is to make project management approachable for many project types — s
 
 ---
 
+## v0.2.0 UX/UI Upgrade
+
+This release steps up the application from a simple local prototype into a more professional project command center. The goal is to make every important project attribute discoverable, connected, and actionable without overwhelming the user.
+
+### New UX/UI capabilities
+
+- Polished dashboard layout with command-center visual hierarchy
+- Sidebar project switcher for multiple projects
+- Role-aware user card for Admin, Power User, Member, and Viewer concepts
+- Personal portfolio dashboard across projects
+- Project-level command center with clickable metrics
+- Drill-down task drawer with status, owner, due date, priority, acceptance criteria, dependency, phase, milestone, risks, issues, evidence, and activity
+- Phase drill-down drawer with progress and linked tasks
+- Relationship map showing how phases, tasks, risks, issues, decisions, lessons, and templates connect
+- Kanban cards that show phase, milestone, owner, due date, priority, risk links, and issue links
+- WBS planner with project traceability references
+- Admin console concept for users, projects, repair tools, and project operations
+- Improved dark/light theme support
+- Stronger responsive layout for desktop, tablet, and mobile
+
+### Professional traceability model
+
+The app now treats project data as a connected graph:
+
+```text
+User → Project Membership → Project → Phase → Milestone → Task
+                                      ├── Risk
+                                      ├── Issue
+                                      ├── Decision
+                                      ├── Lesson Learned
+                                      └── Activity / Evidence
+```
+
+This allows the user to start from a high-level project dashboard and drill into the exact record behind a project status, blocker, risk, due date, or task movement.
+
+### Multi-user and multi-project foundation
+
+The current version remains local/static, but the data model now supports the structure needed for a backend release:
+
+- Users
+- Roles
+- Project membership
+- Project ownership
+- Multiple projects per user
+- Shared projects
+- Admin project operations
+- Portfolio dashboard
+- System-wide JSON export/import
+
+
+---
+
 ## Overview
 
 Thing Planner PM modernizes the structure of a lifecycle project planning spreadsheet into a browser-based project management application. The legacy workbook pattern included project setup, planning, WBS, task monitoring, issue logging, reporting, and hidden calculations. This app turns that into an interactive local web application.
@@ -41,10 +93,10 @@ The application is designed around one shared project model. A task appears in t
 ### Current version
 
 ```text
-v0.1.0 - Local static prototype
+v0.2.0 - UX/UI upgrade, multi-project foundation, role-aware workspace, smart relationships, and drill-downs
 ```
 
-This version runs in the browser with no backend required. It stores data locally in the browser using `localStorage` and supports JSON/CSV export for backup and offline portability.
+This version runs in the browser with no backend required. It stores data locally in the browser using `localStorage` and supports JSON/CSV export for backup and offline portability. The current data model is intentionally shaped to support a future backend using SQLite/Postgres, real authentication, team permissions, and file attachments.
 
 ---
 
