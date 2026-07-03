@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AlertTriangle, Archive, Bot, Boxes, CalendarClock, CheckCircle2, ChevronRight, ClipboardList, Database, Download, GitBranch, KanbanSquare, Layers3, LayoutDashboard, LockKeyhole, Search, Settings, Shield, Sparkles, UserCog, Users, Wrench, X } from 'lucide-react';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
 import { projects, users, tasks as demoTasks, phases, milestones, risks, issues } from './data/demo';
 import type { Project, Status, Task, User } from './types';
 import { calculateProgress, issueById, milestoneById, phaseById, projectActivity, projectStats, riskById, statuses, userById, visibleProjects } from './lib/selectors';
@@ -22,15 +22,23 @@ function MetricCard({ label, value, helper, icon, onClick }: { label: string; va
   </button>;
 }
 
+type ThemeName = 'midnight' | 'slate' | 'light' | 'executive';
+
 function App() {
   const [currentUser, setCurrentUser] = useState<User>(users[0]);
   const [selectedProjectId, setSelectedProjectId] = useState(projects[0].id);
   const [activeView, setActiveView] = useState('portfolio');
   const [taskList, setTaskList] = useState<Task[]>(demoTasks);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(demoTasks[3]);
-  const [drawerMode, setDrawerMode] = useState<'task' | 'phase' | 'admin'>('task');
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [drawerMode, setDrawerMode] = useState<'task' | 'phase' | 'admin' | null>(null);
+  const [theme, setTheme] = useState<ThemeName>(() => (localStorage.getItem('thing-planner-theme') as ThemeName) || 'midnight');
   const [selectedPhaseId, setSelectedPhaseId] = useState<string>('ph2');
   const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('thing-planner-theme', theme);
+  }, [theme]);
 
   const accessibleProjects = useMemo(() => visibleProjects(currentUser), [currentUser]);
   const selectedProject = accessibleProjects.find((project) => project.id === selectedProjectId) ?? accessibleProjects[0];
@@ -53,15 +61,25 @@ function App() {
     if (moved) setSelectedTask({ ...moved, status: targetStatus });
   }
 
-  return <div className="app-shell">
+  const closeDrawer = () => { setSelectedTask(null); setDrawerMode(null); };
+
+  return <div className={`app-shell ${drawerMode ? 'drawer-open' : 'drawer-closed'}`}>
     <aside className="sidebar">
-      <div className="brand"><div className="brand-mark">TP</div><div><strong>Thing Planner</strong><span>Project OS v0.3.0</span></div></div>
+      <div className="brand"><div className="brand-mark">TP</div><div><strong>Thing Planner</strong><span>Project OS v0.3.2</span></div></div>
       <div className="user-panel">
         <div className="avatar">{currentUser.avatar}</div>
         <div><strong>{currentUser.name}</strong><span>{currentUser.role}</span></div>
       </div>
+      <label className="field-label">Demo account</label>
       <select className="select" value={currentUser.id} onChange={(e) => setCurrentUser(userById(e.target.value))}>
         {users.map((user) => <option key={user.id} value={user.id}>{user.name} · {user.role}</option>)}
+      </select>
+      <label className="field-label">Theme</label>
+      <select className="select" value={theme} onChange={(e) => setTheme(e.target.value as ThemeName)}>
+        <option value="midnight">Midnight Command</option>
+        <option value="slate">Slate Professional</option>
+        <option value="executive">Executive Blue</option>
+        <option value="light">Light Workspace</option>
       </select>
       <nav className="nav">
         <button className={activeView === 'portfolio' ? 'active' : ''} onClick={() => setActiveView('portfolio')}><LayoutDashboard size={18}/> Portfolio</button>
@@ -86,7 +104,7 @@ function App() {
           <h1>{activeView === 'portfolio' ? 'Portfolio Command Center' : selectedProject?.name}</h1>
           <p>{selectedProject?.goal}</p>
         </div>
-        <div className="actions"><button><Search size={16}/> Search</button><button><Download size={16}/> Export</button><button className="primary"><Sparkles size={16}/> AI Plan</button></div>
+        <div className="actions"><button onClick={() => setActiveView('project')}><Search size={16}/> Search</button><button><Download size={16}/> Export</button><button className="primary"><Sparkles size={16}/> AI Plan</button></div>
       </header>
 
       {activeView === 'portfolio' && <Portfolio projects={accessibleProjects} taskList={taskList} selectProject={selectProject} />}
@@ -97,11 +115,11 @@ function App() {
       {activeView === 'admin' && <AdminConsole user={currentUser} openAdmin={() => { setDrawerMode('admin'); }} />}
     </main>
 
-    <aside className="drawer">
-      {drawerMode === 'task' && selectedTask && <TaskDrawer task={selectedTask} />}
-      {drawerMode === 'phase' && <PhaseDrawer phaseId={selectedPhaseId} />}
-      {drawerMode === 'admin' && <AdminDrawer />}
-    </aside>
+    {drawerMode && <aside className="drawer">
+      {drawerMode === 'task' && selectedTask && <TaskDrawer task={selectedTask} onClose={closeDrawer} />}
+      {drawerMode === 'phase' && <PhaseDrawer phaseId={selectedPhaseId} onClose={closeDrawer} />}
+      {drawerMode === 'admin' && <AdminDrawer onClose={closeDrawer} />}
+    </aside>}
   </div>;
 }
 
@@ -148,26 +166,33 @@ function ProjectBoard({ project, tasks, query, setQuery, onDragEnd, selectTask }
       <div className="panel-head"><div><h2>Kanban workflow</h2><p>Drag cards across columns. Each card retains references to phase, milestone, risk, issue, owner, dependency, and acceptance criteria.</p></div><input className="search" placeholder="Filter tasks, owner, WBS, status..." value={query} onChange={(event) => setQuery(event.target.value)} /></div>
       <DndContext onDragEnd={onDragEnd}>
         <div className="kanban">
-          {statuses.map((status) => <div className="kanban-col" id={status} key={status}>
-            <div className="kanban-title"><strong>{status}</strong><span>{tasks.filter((task) => task.status === status).length}</span></div>
-            {tasks.filter((task) => task.status === status).map((task) => <TaskCard key={task.id} task={task} selectTask={selectTask} />)}
-          </div>)}
+          {statuses.map((status) => <KanbanColumn key={status} status={status} tasks={tasks.filter((task) => task.status === status)} selectTask={selectTask} />)}
         </div>
       </DndContext>
     </div>
   </section>;
 }
 
+function KanbanColumn({ status, tasks, selectTask }: { status: Status; tasks: Task[]; selectTask: (task: Task) => void }) {
+  const { setNodeRef, isOver } = useDroppable({ id: status });
+  return <div ref={setNodeRef} className={`kanban-col ${isOver ? 'drop-over' : ''}`}>
+    <div className="kanban-title"><strong>{status}</strong><span>{tasks.length}</span></div>
+    {tasks.map((task) => <TaskCard key={task.id} task={task} selectTask={selectTask} />)}
+  </div>;
+}
+
 function TaskCard({ task, selectTask }: { task: Task; selectTask: (task: Task) => void }) {
   const phase = phaseById(task.phaseId);
   const milestone = milestoneById(task.milestoneId);
-  return <button className="task-card" onClick={() => selectTask(task)}>
-    <div className="task-top"><span>{task.wbs}</span><Pill tone={task.priority === 'Critical' ? 'red' : task.priority === 'High' ? 'yellow' : 'neutral'}>{task.priority}</Pill></div>
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: task.id });
+  const style = transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined;
+  return <article ref={setNodeRef} style={style} className={`task-card ${isDragging ? 'dragging' : ''}`} onClick={() => selectTask(task)}>
+    <div className="task-top"><button className="drag-handle" {...listeners} {...attributes} aria-label={`Drag ${task.title}`}>⋮⋮</button><span>{task.wbs}</span><Pill tone={task.priority === 'Critical' ? 'red' : task.priority === 'High' ? 'yellow' : 'neutral'}>{task.priority}</Pill></div>
     <h3>{task.title}</h3>
     <p>{task.description}</p>
     <div className="ref-row"><Pill tone="purple">{phase?.name}</Pill><Pill tone="blue">{milestone?.name}</Pill></div>
     <div className="task-foot"><span>{userById(task.ownerId).name}</span><span>{task.dueDate}</span></div>
-  </button>;
+  </article>;
 }
 
 function WbsView({ project, tasks, selectTask }: { project: Project; tasks: Task[]; selectTask: (task: Task) => void }) {
@@ -203,18 +228,18 @@ function AdminConsole({ user, openAdmin }: { user: User; openAdmin: () => void }
   return <section className="content-grid"><div className="metrics-row"><MetricCard label="Users" value={users.length} helper="Active demo accounts" icon={<Users/>}/><MetricCard label="Projects" value={projects.length} helper="All workspace projects" icon={<Boxes/>}/><MetricCard label="Repair tools" value="6" helper="Validation and recovery actions" icon={<Wrench/>}/><MetricCard label="Audit mode" value="On" helper="Activity and admin trail" icon={<LockKeyhole/>}/></div><div className="panel wide"><div className="panel-head"><div><h2>Admin console</h2><p>Manage users, project ownership, repair tools, archive/restore, and system exports.</p></div><button className="primary" onClick={openAdmin}><Settings/> Open tools</button></div><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Access</th></tr></thead><tbody>{users.map((item) => <tr key={item.id}><td>{item.name}</td><td>{item.email}</td><td><Pill tone={item.role === 'Admin' ? 'red' : item.role === 'Power User' ? 'purple' : 'neutral'}>{item.role}</Pill></td><td>{projects.filter((project) => project.memberIds.includes(item.id)).length} projects</td></tr>)}</tbody></table></div></section>;
 }
 
-function TaskDrawer({ task }: { task: Task }) {
-  return <div><div className="drawer-head"><div><span className="eyebrow">Task drill-down</span><h2>{task.title}</h2></div><button><X size={16}/></button></div><p>{task.description}</p><div className="drawer-section"><h3>Smart references</h3><div className="ref-stack"><span><strong>WBS:</strong> {task.wbs}</span><span><strong>Phase:</strong> {phaseById(task.phaseId)?.name}</span><span><strong>Milestone:</strong> {milestoneById(task.milestoneId)?.name}</span><span><strong>Owner:</strong> {userById(task.ownerId).name}</span><span><strong>Dependencies:</strong> {task.dependencyIds.map((id) => demoTasks.find((t) => t.id === id)?.title).filter(Boolean).join(', ') || 'None'}</span></div></div><div className="drawer-section"><h3>Risks and issues</h3>{task.riskIds.map((id) => <Pill key={id} tone="yellow">Risk: {riskById(id)?.title}</Pill>)}{task.issueIds.map((id) => <Pill key={id} tone="red">Issue: {issueById(id)?.title}</Pill>)}{!task.riskIds.length && !task.issueIds.length && <p className="muted">No linked risks or issues.</p>}</div><div className="drawer-section"><h3>Acceptance criteria</h3><ul>{task.acceptanceCriteria.map((item) => <li key={item}>{item}</li>)}</ul></div><div className="drawer-section"><h3>Evidence</h3><p>{task.evidence.length ? task.evidence.join(', ') : 'No evidence attached yet.'}</p></div></div>;
+function TaskDrawer({ task, onClose }: { task: Task; onClose: () => void }) {
+  return <div><div className="drawer-head"><div><span className="eyebrow">Task drill-down</span><h2>{task.title}</h2></div><button onClick={onClose} aria-label="Close drill-down"><X size={16}/></button></div><p>{task.description}</p><div className="drawer-section"><h3>Smart references</h3><div className="ref-stack"><span><strong>WBS:</strong> {task.wbs}</span><span><strong>Phase:</strong> {phaseById(task.phaseId)?.name}</span><span><strong>Milestone:</strong> {milestoneById(task.milestoneId)?.name}</span><span><strong>Owner:</strong> {userById(task.ownerId).name}</span><span><strong>Dependencies:</strong> {task.dependencyIds.map((id) => demoTasks.find((t) => t.id === id)?.title).filter(Boolean).join(', ') || 'None'}</span></div></div><div className="drawer-section"><h3>Risks and issues</h3>{task.riskIds.map((id) => <Pill key={id} tone="yellow">Risk: {riskById(id)?.title}</Pill>)}{task.issueIds.map((id) => <Pill key={id} tone="red">Issue: {issueById(id)?.title}</Pill>)}{!task.riskIds.length && !task.issueIds.length && <p className="muted">No linked risks or issues.</p>}</div><div className="drawer-section"><h3>Acceptance criteria</h3><ul>{task.acceptanceCriteria.map((item) => <li key={item}>{item}</li>)}</ul></div><div className="drawer-section"><h3>Evidence</h3><p>{task.evidence.length ? task.evidence.join(', ') : 'No evidence attached yet.'}</p></div></div>;
 }
 
-function PhaseDrawer({ phaseId }: { phaseId: string }) {
+function PhaseDrawer({ phaseId, onClose }: { phaseId: string; onClose: () => void }) {
   const phase = phaseById(phaseId);
   if (!phase) return null;
-  return <div><span className="eyebrow">Phase drill-down</span><h2>{phase.name}</h2><p>{phase.description}</p><div className="progress big"><span style={{ width: `${phase.progress}%` }}/></div><div className="drawer-section"><h3>Milestones</h3>{milestones.filter((milestone) => milestone.phaseId === phase.id).map((milestone) => <div className="activity" key={milestone.id}><strong>{milestone.name}</strong><span>{milestone.status} · due {milestone.dueDate}</span></div>)}</div></div>;
+  return <div><div className="drawer-head"><div><span className="eyebrow">Phase drill-down</span><h2>{phase.name}</h2></div><button onClick={onClose} aria-label="Close drill-down"><X size={16}/></button></div><p>{phase.description}</p><div className="progress big"><span style={{ width: `${phase.progress}%` }}/></div><div className="drawer-section"><h3>Milestones</h3>{milestones.filter((milestone) => milestone.phaseId === phase.id).map((milestone) => <div className="activity" key={milestone.id}><strong>{milestone.name}</strong><span>{milestone.status} · due {milestone.dueDate}</span></div>)}</div></div>;
 }
 
-function AdminDrawer() {
-  return <div><span className="eyebrow">Admin repair tools</span><h2>Project operations</h2><div className="drawer-section"><button className="big-action"><Wrench/> Recalculate project health</button><button className="big-action"><Layers3/> Rebuild WBS numbering</button><button className="big-action"><Database/> Validate imported data</button><button className="big-action"><Archive/> Restore archived project</button></div><p className="muted">These are frontend-ready controls. v0.4 should connect them to real API actions and audit records.</p></div>;
+function AdminDrawer({ onClose }: { onClose: () => void }) {
+  return <div><div className="drawer-head"><div><span className="eyebrow">Admin repair tools</span><h2>Project operations</h2></div><button onClick={onClose} aria-label="Close admin tools"><X size={16}/></button></div><div className="drawer-section"><button className="big-action"><Wrench/> Recalculate project health</button><button className="big-action"><Layers3/> Rebuild WBS numbering</button><button className="big-action"><Database/> Validate imported data</button><button className="big-action"><Archive/> Restore archived project</button></div><p className="muted">These are frontend-ready controls. v0.4 should connect them to real API actions and audit records.</p></div>;
 }
 
 createRoot(document.getElementById('root')!).render(<App />);

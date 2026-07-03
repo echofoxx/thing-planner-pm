@@ -1,41 +1,35 @@
-# Thing Planner PM v0.3.1 Release Notes
+# Thing Planner PM v0.3.3 Release Notes
+
+## Purpose
+
+v0.3.3 is a Docker reliability patch for the modern React/Vite frontend.
 
 ## Fixes
 
-- Fixed Docker production build failure caused by TypeScript deprecation enforcement around `moduleResolution=node10`.
-- Updated `tsconfig.json` to use `moduleResolution: Bundler`, which is appropriate for Vite-based apps.
-- Pinned TypeScript to the 5.x line so Docker builds are more reproducible.
+- Changed the default Docker build to serve the already-built `dist/` folder with Nginx.
+- Avoids `npm install` during the normal Docker build path.
+- Keeps a separate `Dockerfile.build` for source-based production builds when desired.
+- Retains the v0.3.2 UX fixes: closable drill-down drawer, theme selector, improved layout polish, and TypeScript module-resolution fix.
 
-# Release Notes — Thing Planner PM v0.3.0
+## Recommended Docker command
 
-## Summary
+```powershell
+cd C:\docker\thing-planner-pm
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+```
 
-v0.3.0 rebuilds Thing Planner PM as a modern React/Vite/TypeScript frontend foundation. It introduces a professional application shell, multi-user role model, multi-project portfolio, project-level dashboards, WBS traceability, relationship drill-downs, task drawers, and admin console concepts.
+Open:
 
-## Added
+```text
+http://localhost:8088
+```
 
-- React + Vite + TypeScript project structure
-- Dockerfile and docker-compose.yml
-- Role switcher for Admin, Power User, Member, Viewer
-- Multiple projects per user demo model
-- Portfolio Command Center
-- Project Kanban board
-- WBS table
-- Relationship map
-- Task drill-down drawer
-- Phase drill-down drawer
-- Admin console concept
-- Executive report page
-- Backend-ready data types and selectors
+## Source-build option
 
-## Known Limitations
+If you want Docker to rebuild the React app from source instead of using the committed `dist/` folder:
 
-- Data is demo/static frontend data.
-- Auth is simulated through a user switcher.
-- Admin actions are frontend placeholders.
-- Kanban drag/drop state should be hardened in v0.3.1.
-- Import/export from earlier static version should be reintroduced in React form.
-
-## Recommended Next Release
-
-v0.4.0 should add a real backend, SQLite persistence, real authentication, project memberships, role-based API enforcement, and activity logging.
+```powershell
+docker build -f Dockerfile.build -t thing-planner-pm:source-build .
+```

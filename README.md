@@ -1,12 +1,23 @@
-# Thing Planner PM v0.3.0
+# Thing Planner PM v0.3.2
 
 A modern, template-first project management web application for software, home, auto, office, standards/document, and event projects. This release moves Thing Planner PM from a static prototype toward a real modern frontend foundation using React, Vite, and TypeScript.
 
 ## Release Goal
 
-v0.3.0 introduces a modern frontend architecture with a polished UI, multi-user role model, multiple projects per user, project portfolio dashboard, drill-downs, smart references, WBS traceability, admin console concepts, and Docker-ready deployment.
+v0.3.2 introduces a modern frontend architecture with a polished UI, multi-user role model, multiple projects per user, project portfolio dashboard, drill-downs, smart references, WBS traceability, admin console concepts, and Docker-ready deployment.
 
 This version is still frontend/demo-data driven, but the data model is shaped for a future backend using SQLite/Postgres and real authentication.
+
+
+### v0.3.2 UX Fixes
+
+- Fixed task drill-down close behavior.
+- Detail drawer is now closed by default and opens only when the user drills into a task, phase, or admin tool.
+- Added a theme selector in the sidebar.
+- Added themes: Midnight Command, Slate Professional, Executive Blue, and Light Workspace.
+- Improved layout behavior when the drawer is open or closed.
+- Improved card polish, spacing, contrast, shadows, focus states, and responsive behavior.
+- Added real drag handles and drop zones for the Kanban board foundation.
 
 ## Features
 
@@ -15,8 +26,8 @@ This version is still frontend/demo-data driven, but the data model is shaped fo
 - React + Vite + TypeScript
 - Componentized application shell
 - Responsive layout for desktop and tablet
-- Professional dark command-center visual style
-- Sidebar navigation, top action bar, project switcher, and detail drawer
+- Professional command-center visual style with four theme options
+- Sidebar navigation, top action bar, project switcher, closeable detail drawer, and theme selector
 
 ### Multi-User Foundation
 
@@ -352,3 +363,42 @@ docker compose up -d
 ```
 
 This release pins TypeScript to the 5.x line and uses the Vite-recommended bundler module resolution setting.
+
+---
+
+## v0.3.3 Docker Reliability Patch
+
+The default Dockerfile now serves the prebuilt `dist/` folder with Nginx. This avoids npm install failures inside Docker and makes `docker compose up --build -d` faster and more reliable for local demos.
+
+### Recommended Docker Run
+
+```powershell
+cd C:\docker\thing-planner-pm
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+```
+
+Open:
+
+```text
+http://localhost:8088
+```
+
+### Rebuild the Frontend Locally
+
+When changing React source files, rebuild `dist/` first:
+
+```powershell
+npm install
+npm run build
+docker compose up --build -d
+```
+
+### Optional Source-Based Docker Build
+
+A source-build Dockerfile is also included:
+
+```powershell
+docker build -f Dockerfile.build -t thing-planner-pm:source-build .
+```
